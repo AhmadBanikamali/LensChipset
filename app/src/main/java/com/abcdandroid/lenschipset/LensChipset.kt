@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -35,28 +34,28 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 fun LensChipset(
     chipList: List<String> = listOf(
         "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "19",
-        "20",
-        "21",
-        "22",
-        "23" /**/
+        "2a",
+        "3aa",
+        "4aaaa",
+        "5aaaaa",
+        "6aaaaaa",
+        "7aaaaaa",
+        "8aaaaaaa",
+        "9aaaaaaaa",
+        "10aaaaaaaa",
+        "11aaaaaaaaa",
+        "12aaaaaaaaaa",
+        "13aaaaaaaaaaaaa",
+        "14aaaaaaaaaaaaaq",
+        "15aaaaaaaaaaaaa",
+        "16aaaaaaaaaaaaa",
+        "17aaaaaaaaaaaaa",
+        "18aaaaaaaaaaaaa",
+        "19aaaaaaaaaaaaa",
+        "20aaaaaaaaaaaaa",
+        "21aaaaaaaaaaaaa",
+        "22aaaaaaaaaaaaa",
+        "23aaa"
     )
 ) {
     Box(modifier = Modifier.height(500.dp)) {
@@ -66,26 +65,25 @@ fun LensChipset(
         val paddingValueInPx = 500f
         val paddingValueInDp = paddingValueInPx.toDp()
 
-        println(state.firstVisibleItemScrollOffset)
+        val itemsSize = mutableListOf<Int>()
+
 
         LazyRow(
-            Modifier
-                .onPlaced {
-
-                }
-                .onGloballyPositioned {
-
-                },
+            Modifier.onPlaced {
+                println("itemsSize:$itemsSize")
+            },
             flingBehavior = rememberSnapperFlingBehavior(
                 lazyListState = state,
                 snapOffsetForItem = { snapperLayoutInfo: SnapperLayoutInfo, snapLayoutItemInfo: SnapperLayoutItemInfo ->
-
-                   paddingValueInPx.toInt()
+                    snapperLayoutInfo.visibleItems.forEach {
+                        println(it.index)
+                    }
+                    paddingValueInPx.toInt()
                 },
                 endContentPadding = (0).dp,
                 decayAnimationSpec = rememberSplineBasedDecay(),
                 springAnimationSpec = tween(durationMillis = 100),
-                maximumFlingDistance = {5f}
+                maximumFlingDistance = { 5f }
             ),
             state = state,
 
@@ -98,7 +96,11 @@ fun LensChipset(
                         color = Color.White,
                         modifier = Modifier
                             .onPlaced {
-                                println(it.size)
+                                try {
+                                    itemsSize[index]
+                                } catch (e: IndexOutOfBoundsException) {
+                                    itemsSize.add(index, it.size.width)
+                                }
                             }
                             .padding(start = if (index == 0) paddingValueInDp.dp else 0.dp)
                             .background(
